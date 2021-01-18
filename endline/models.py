@@ -2,7 +2,18 @@ from otree.api import (
     models, widgets, BaseConstants, BaseSubsession, BaseGroup, BasePlayer,
     Currency as c, currency_range
 )
+from django.db import models as djmodels
+from datetime import datetime, timezone
 from django.utils.translation import gettext_lazy as _
+
+
+def now():
+    """
+    Current UTC time wrapper
+    :return: Current time in UTC timezone
+    :rtype: datetime
+    """
+    return datetime.now(tz=timezone.utc)
 
 
 class Constants(BaseConstants):
@@ -31,7 +42,7 @@ class Constants(BaseConstants):
              "residence, an apartment you need to save or take a loan")],
         [6, _("We can afford any purchases without restrictions and loans")]
     ]
-    RELIGION_CHOICES =[(1, _('Atheist')),
+    RELIGION_CHOICES = [(1, _('Atheist')),
                         (2, _('Spiritual but not religious')),
                         (3, _('Orthodox Christian')),
                         (4, _('Catholic')),
@@ -58,6 +69,7 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    arrival_time = djmodels.DateTimeField(blank=True, null=True)
     sex = models.IntegerField(
         choices=[(0, _('Male')), (1, _('Female'))],
         verbose_name=_("Please indicate your gender"),
@@ -91,3 +103,6 @@ class Player(BasePlayer):
 
     feedback = models.LongStringField(
         verbose_name=_("Do you have any feedback for us?  Did you enjoy the study?  Any complaints?"))
+
+    def start(self):
+        self.arrival_time = now()
