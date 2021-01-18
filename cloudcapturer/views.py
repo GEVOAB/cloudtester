@@ -27,9 +27,11 @@ class CloudRedirector(RedirectView):
         all_participants = session.participant_set.all()
         hitId = self.request.GET.get('hitId')
         workerId = self.request.GET.get('workerId')
-
-        candidates = [i for i in all_participants if i.vars.get('hitId') == hitId and
-                      i.vars.get('workerId') == workerId]
+        if hitId and workerId:
+            candidates = [i for i in all_participants if i.vars.get('hitId') == hitId and
+                          i.vars.get('workerId') == workerId]
+        else:
+            candidates = None
         if candidates:
             participant = candidates[0]
         else:
