@@ -6,7 +6,7 @@ SESSION_CONFIGS = [
        display_name="test",
        num_demo_participants=1,
        app_sequence=[
-           # 'endline',
+           'endline',
            'last'
        ]
     ),

@@ -27,6 +27,7 @@ class CloudRedirector(RedirectView):
         all_participants = session.participant_set.all()
         hitId = self.request.GET.get('hitId')
         workerId = self.request.GET.get('workerId')
+
         candidates = [i for i in all_participants if i.vars.get('hitId') == hitId and
                       i.vars.get('workerId') == workerId]
         if candidates:
@@ -35,6 +36,7 @@ class CloudRedirector(RedirectView):
             participant = session.participant_set.filter(visited=False).order_by('id').first()
         if participant:
             participant.vars.update(**self.request.GET.dict())
+            participant.label = workerId
             participant.save()
             return participant._url_i_should_be_on()
 
