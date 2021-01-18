@@ -35,6 +35,7 @@ class CloudRedirector(RedirectView):
             participant = session.participant_set.filter(visited=False).order_by('id').first()
         if participant:
             participant.vars.update(**self.request.GET.dict())
+            participant.save()
             return participant._url_i_should_be_on()
 
 

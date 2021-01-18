@@ -5,7 +5,10 @@ SESSION_CONFIGS = [
        name='test',
        display_name="test",
        num_demo_participants=1,
-       app_sequence=['endline', 'last']
+       app_sequence=[
+           # 'endline',
+           'last'
+       ]
     ),
 ]
 
