@@ -1,14 +1,16 @@
 from os import environ
-EXTENSION_APPS=['cloudcapturer']
+
+EXTENSION_APPS = ['cloudcapturer']
 SESSION_CONFIGS = [
     dict(
-       name='test',
-       display_name="test",
-       num_demo_participants=1,
-       app_sequence=[
-           'endline',
-           'last'
-       ]
+        name='test',
+        display_name="test",
+        num_demo_participants=1,
+        app_sequence=[
+            'endline',
+            'last'
+        ],
+        time_to_start='2021-01-19 19:33 MSK'
     ),
 ]
 
@@ -28,7 +30,7 @@ LANGUAGE_CODE = 'en'
 # e.g. EUR, GBP, CNY, JPY
 REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
-
+TIME_ZONE = 'US/Eastern'
 ADMIN_USERNAME = 'admin'
 # for security, best to set admin password in an environment variable
 ADMIN_PASSWORD = environ.get('OTREE_ADMIN_PASSWORD')

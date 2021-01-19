@@ -3,8 +3,10 @@ from otree.api import (
     Currency as c, currency_range
 )
 from django.db import models as djmodels
-from datetime import datetime, timezone
+from datetime import datetime, timedelta
+from pytz import timezone
 from django.utils.translation import gettext_lazy as _
+from dateparser import parse
 
 
 def now():
@@ -13,13 +15,15 @@ def now():
     :return: Current time in UTC timezone
     :rtype: datetime
     """
-    return datetime.now(tz=timezone.utc)
+    return datetime.now(timezone('UTC'))
 
 
 class Constants(BaseConstants):
     name_in_url = 'endline'
     players_per_group = None
     num_rounds = 1
+    time_bonus = '$1.00'
+    time_to_proceed = 60
     EDUCATION_CHOICES = [
         [1, _('Primary or lower education')],
         [2, _('Secondary (lower or upper) education')],
@@ -61,7 +65,22 @@ class Constants(BaseConstants):
 
 
 class Subsession(BaseSubsession):
-    pass
+    time_to_start = djmodels.DateTimeField(blank=True, null=True)
+
+    def creating_session(self):
+        # in case there is no time to start in session config we fall back to current time plus 10 min
+
+        fallback_time = str(datetime.utcnow() + timedelta(minutes=10))
+        time_to_start_str = self.session.config.get('time_to_start')
+        if time_to_start_str in (None, 0, ''):
+            time_to_start_str = fallback_time
+        if time_to_start_str:
+            time_to_start = parse(time_to_start_str)
+            if not time_to_start.tzinfo:
+                tz = timezone('UTC')
+                time_to_start = tz.localize(time_to_start)
+
+            self.time_to_start = time_to_start
 
 
 class Group(BaseGroup):
