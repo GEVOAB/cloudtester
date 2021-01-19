@@ -6,11 +6,17 @@ from datetime import datetime
 from django.utils.timezone import is_aware
 from .models import Constants
 
+
 class Timer(Page):
+
     def is_displayed(self):
         tts = self.subsession.time_to_start
         seconds_till_start = (tts - datetime.now(tz=timezone('UTC'))).total_seconds()
-        return seconds_till_start > -Constants.time_to_proceed
+        if seconds_till_start > -Constants.time_to_proceed:
+            return True
+        else:
+            self.player.set_times()
+            return False
 
     def vars_for_template(self):
         tts = self.subsession.time_to_start
@@ -25,6 +31,9 @@ class Timer(Page):
             seconds_till_start=seconds_till_start,
 
         )
+
+    def before_next_page(self):
+        self.player.set_times()
 
 
 class Endline(Page):

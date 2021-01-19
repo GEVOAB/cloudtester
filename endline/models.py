@@ -88,7 +88,15 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    def set_times(self):
+        self.time_to_pass = datetime.now(tz=timezone('UTC'))
+        self.diff_to_pass = (self.time_to_pass - self.subsession.time_to_start).total_seconds()
+        self.on_time = 0 < self.diff_to_pass < Constants.time_to_proceed
+
     arrival_time = djmodels.DateTimeField(blank=True, null=True)
+    time_to_pass = djmodels.DateTimeField(blank=True, null=True)
+    diff_to_pass = models.FloatField()
+    on_time = models.BooleanField()
     sex = models.IntegerField(
         choices=[(0, _('Male')), (1, _('Female'))],
         verbose_name=_("Please indicate your gender"),
