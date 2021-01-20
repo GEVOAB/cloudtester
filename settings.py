@@ -10,7 +10,7 @@ SESSION_CONFIGS = [
             'endline',
             'last'
         ],
-        time_to_start='2021-01-19 22:32 MSK'
+        time_to_start='2021-01-20 15:34 MSK'
     ),
 ]
 

@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from pytz import timezone
 from django.utils.translation import gettext_lazy as _
 from dateparser import parse
+import humanize
 
 
 def now():
@@ -23,7 +24,9 @@ class Constants(BaseConstants):
     players_per_group = None
     num_rounds = 1
     time_bonus = '$1.00'
-    time_to_proceed = 60
+    time_to_proceed = 180
+    delta = timedelta(seconds=time_to_proceed)
+    formatted_delta = humanize.naturaldelta(delta)
     EDUCATION_CHOICES = [
         [1, _('Primary or lower education')],
         [2, _('Secondary (lower or upper) education')],
@@ -96,6 +99,9 @@ class Player(BasePlayer):
     arrival_time = djmodels.DateTimeField(blank=True, null=True)
     time_to_pass = djmodels.DateTimeField(blank=True, null=True)
     diff_to_pass = models.FloatField()
+    worker_id = models.StringField()
+    hit_id = models.StringField()
+    assignment_id = models.StringField()
     on_time = models.BooleanField()
     sex = models.IntegerField(
         choices=[(0, _('Male')), (1, _('Female'))],
@@ -133,3 +139,6 @@ class Player(BasePlayer):
 
     def start(self):
         self.arrival_time = now()
+        self.worker_id = self.participant.vars.get('workerId')
+        self.hit_id = self.participant.vars.get('hitId')
+        self.assignment_id = self.participant.vars.get('assignmentId')
