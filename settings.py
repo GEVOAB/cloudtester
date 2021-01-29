@@ -7,7 +7,7 @@ SESSION_CONFIGS = [
         display_name="test",
         num_demo_participants=1,
         app_sequence=[
-            'endline',
+            'starter',
             'last'
         ],
         time_to_start='2021-01-20 15:34 MSK'
