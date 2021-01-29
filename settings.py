@@ -12,6 +12,14 @@ SESSION_CONFIGS = [
         ],
         time_to_start='2021-01-20 15:34 MSK'
     ),
+    dict(
+        name='test2',
+        display_name="test2",
+        num_demo_participants=10,
+        app_sequence=[
+            'cloudcapturer'
+        ]
+    ),
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
